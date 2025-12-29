@@ -1,6 +1,14 @@
 import axios from 'axios';
+import { Link } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import {
+  FlatList,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 type Pokemon = {
   type: string;
@@ -78,46 +86,48 @@ export default function Index() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Pokémon List</Text>
-      <FlatList        
+      <FlatList
         data={pokemons}
         keyExtractor={(item) => item.name}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-           
-            }}
-          >
-            <View
-              style={[
-                styles.pokemonCard,
-                {
-                  backgroundColor:
-                    colorByType[item.type as keyof typeof colorByType] ||
-                    '#f5f5f5',
-                },
-              ]}
-            >
-              <View>
-                <Text style={styles.pokemonName}>{item.name}</Text>
-              <Text style={{fontSize: 16, color: 'grey', fontWeight: 600}}>{item.type}</Text>
+          <Link href={{ pathname: "/details", params: { name: item.name } }} asChild >
+            <Pressable>
+              <View
+              
+              >
+                <View
+                  style={[
+                    styles.pokemonCard,
+                    {
+                      backgroundColor:
+                        colorByType[item.type as keyof typeof colorByType] ||
+                        '#f5f5f5',
+                    },
+                  ]}
+                >
+                  <View>
+                    <Text style={styles.pokemonName}>{item.name}</Text>
+                    <Text
+                      style={{ fontSize: 16, color: 'grey', fontWeight: 600 }}
+                    >
+                      {item.type}
+                    </Text>
+                  </View>
+                  <View style={{ flexDirection: 'row' }}>
+                    <Image
+                      source={{ uri: item.image1 }}
+                      style={styles.pokemonImage}
+                    />
+                    <Image
+                      source={{ uri: item.image2 }}
+                      style={styles.pokemonImage}
+                    />
+                  </View>
+                </View>
               </View>
-              <View style={{ flexDirection: 'row' }}>
-                <Image
-                  source={{ uri: item.image1 }}
-                  style={styles.pokemonImage}
-                />
-                <Image
-                  source={{ uri: item.image2 }}
-                  style={styles.pokemonImage}
-                />
-              </View>
-            </View>
-          </View>
+            </Pressable>
+          </Link>
         )}
       />
     </View>
